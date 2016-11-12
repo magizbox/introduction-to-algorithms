@@ -1,3 +1,8 @@
+package week_1;
+
+/**
+ * Created by rain on 11/12/2016.
+ */
 public class Main {
 
     public static void main(String[] args) {
