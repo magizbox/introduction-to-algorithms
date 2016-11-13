@@ -1,7 +1,6 @@
-package week_1.tests;
+package week1.dynamic_connectivity;
 
 import org.junit.Test;
-import week_1.QuickFindUF;
 
 import static org.junit.Assert.*;
 

@@ -1,4 +1,4 @@
-package week_1;
+package week1.dynamic_connectivity;
 
 /**
  * Created by rain on 11/12/2016.
