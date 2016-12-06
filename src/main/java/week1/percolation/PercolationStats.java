@@ -1,5 +1,5 @@
 package week1.percolation;
-
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 /**
  * Created by LanAnh on 14/11/2016.
  */
