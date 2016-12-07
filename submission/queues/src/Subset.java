@@ -1,5 +1,3 @@
-package week2.queues;
-
 import edu.princeton.cs.algs4.StdIn;
 
 /**

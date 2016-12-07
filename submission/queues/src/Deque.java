@@ -1,5 +1,3 @@
-package week2.queues;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
