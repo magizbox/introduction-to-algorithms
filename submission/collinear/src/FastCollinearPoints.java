@@ -33,6 +33,7 @@ public class FastCollinearPoints {
             throw new IllegalArgumentException();
         }
         for (int i = 0; i < size - 3; i++) {
+            Arrays.sort(temp);
             Arrays.sort(temp, temp[i].slopeOrder());
 
             for (int p = 0, first = 1, last = 2; last < size; last++) {
