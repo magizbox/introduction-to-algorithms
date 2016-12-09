@@ -95,7 +95,11 @@ public class Board {
 
     // a board that is obtained by exchanging any pair of blocks
     public Board twin() {
-        return null;
+        int[][] board = copy();
+        int temp = board[1][0];
+        board[1][0] = board[0][0];
+        board[0][0] = temp;
+        return new Board(board);
     }
 
     // does this board equal y?
@@ -121,11 +125,8 @@ public class Board {
             return null;
         }
         int[][] board = copy();
-        int i = blank.x;
-        for (int j = n - 2; j >= blank.y; j--) {
-            board[i][j] = board[i][j + 1];
-        }
-        board[i][n - 1] = 0;
+        board[blank.x][blank.y] = board[blank.x][blank.y + 1];
+        board[blank.x][blank.y + 1] = 0;
         return new Board(board);
     }
 
@@ -136,41 +137,32 @@ public class Board {
             return null;
         }
         int[][] board = copy();
-        int i = blank.x;
-        for (int j = blank.y; j >= 1; j--) {
-            board[i][j] = board[i][j - 1];
-        }
-        board[i][0] = 0;
+        board[blank.x][blank.y] = board[blank.x][blank.y - 1];
+        board[blank.x][blank.y - 1] = 0;
         return new Board(board);
     }
 
     private Board moveUp() {
         int n = dimension();
         Point blank = getBlankPosition();
-        if (blank.x == 0) {
+        if (blank.x == n - 1) {
             return null;
         }
         int[][] board = copy();
-        int j = blank.y;
-        for (int i = n - 2; i >= blank.x; i--) {
-            board[i][j] = board[i + 1][j];
-        }
-        board[n - 1][j] = 0;
+        board[blank.x][blank.y] = board[blank.x + 1][blank.y];
+        board[blank.x + 1][blank.y] = 0;
         return new Board(board);
     }
 
     private Board moveDown() {
         int n = dimension();
         Point blank = getBlankPosition();
-        if (blank.x == n - 1) {
+        if (blank.x == 0) {
             return null;
         }
         int[][] board = copy();
-        int j = blank.y;
-        for (int i = 1; i <= blank.x; i++) {
-            board[i][j] = board[i - 1][j];
-        }
-        board[0][j] = 0;
+        board[blank.x][blank.y] = board[blank.x - 1][blank.y];
+        board[blank.x - 1][blank.y] = 0;
         return new Board(board);
     }
 

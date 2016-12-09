@@ -75,6 +75,13 @@ public class BoardTest {
     @Test
     public void testNeighbors() throws Exception {
         assertEquals(2, Iterables.size(board4.neighbors()));
+        assertEquals(4, Iterables.size(board8.neighbors()));
         assertEquals(3, Iterables.size(board23.neighbors()));
+    }
+
+    @Test
+    public void testTwin() throws Exception {
+        Board twin = board4.twin();
+        assertEquals(3, twin.dimension());
     }
 }
