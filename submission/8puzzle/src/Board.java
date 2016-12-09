@@ -93,7 +93,11 @@ public class Board {
 
     // a board that is obtained by exchanging any pair of blocks
     public Board twin() {
-        return null;
+        int[][] board = copy();
+        int temp = board[1][0];
+        board[1][0] = board[0][0];
+        board[0][0] = temp;
+        return new Board(board);
     }
 
     // does this board equal y?
