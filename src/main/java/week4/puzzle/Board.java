@@ -2,6 +2,8 @@ package week4.puzzle;
 
 import edu.princeton.cs.algs4.In;
 
+import java.util.Stack;
+
 /**
  * Created by rain on 12/9/2016.
  */
@@ -16,17 +18,74 @@ public class Board {
 
     // board dimension n
     public int dimension() {
-        return 0;
+        return blocks.length;
     }
 
     // number of blocks out of place
     public int hamming() {
-        return 0;
+        int n = this.dimension();
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                Point actual = new Point(i, j);
+                Point expected = getPosition(blocks[i][j]);
+                if (!actual.equals(expected) && blocks[i][j] != 0) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private class Point {
+        public int x;
+        public int y;
+
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public int distance(Point that) {
+            return Math.abs(that.x - x) + Math.abs(that.y - y);
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            Point that = (Point) object;
+            return (this.x == that.x) && (this.y == that.y);
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 10000;
+            return x + hash * y;
+        }
+    }
+
+    private Point getPosition(int value) {
+        int n = this.dimension();
+        int row = (value - 1) / n;
+        int col = (value - 1) % n;
+        return new Point(row, col);
+
     }
 
     // sum of Manhattan distances between blocks and goal
     public int manhattan() {
-        return 0;
+        int n = this.dimension();
+        int sum = 0;
+        int expectedValue;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                Point actual = new Point(i, j);
+                Point expected = getPosition(blocks[i][j]);
+                if (!actual.equals(expected) && blocks[i][j] != 0) {
+                    sum += actual.distance(expected);
+                }
+            }
+        }
+        return sum;
     }
 
     // is this board the goal board?
@@ -44,14 +103,151 @@ public class Board {
         return true;
     }
 
+    private int[][] copy() {
+        int n = dimension();
+        int[][] board = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                board[i][j] = blocks[i][j];
+            }
+        }
+        return board;
+    }
+
+    private Board moveLeft() {
+        int n = dimension();
+        Point blank = getBlankPosition();
+        if (blank.y == n - 1) {
+            return null;
+        }
+        int[][] board = copy();
+        int i = blank.x;
+        for (int j = n - 2; j >= blank.y; j--) {
+            board[i][j] = board[i][j + 1];
+        }
+        board[i][n - 1] = 0;
+        return new Board(board);
+    }
+
+    private Board moveRight() {
+        int n = dimension();
+        Point blank = getBlankPosition();
+        if (blank.y == 0) {
+            return null;
+        }
+        int[][] board = copy();
+        int i = blank.x;
+        for (int j = blank.y; j >= 1; j--) {
+            board[i][j] = board[i][j - 1];
+        }
+        board[i][0] = 0;
+        return new Board(board);
+    }
+
+    private Board moveUp() {
+        int n = dimension();
+        Point blank = getBlankPosition();
+        if (blank.x == 0) {
+            return null;
+        }
+        int[][] board = copy();
+        int j = blank.y;
+        for (int i = n - 2; i >= blank.x; i--) {
+            board[i][j] = board[i + 1][j];
+        }
+        board[n - 1][j] = 0;
+        return new Board(board);
+    }
+
+    private Board moveDown() {
+        int n = dimension();
+        Point blank = getBlankPosition();
+        if (blank.x == n - 1) {
+            return null;
+        }
+        int[][] board = copy();
+        int j = blank.y;
+        for (int i = 1; i <= blank.x; i++) {
+            board[i][j] = board[i - 1][j];
+        }
+        board[0][j] = 0;
+        return new Board(board);
+    }
+
+    private Point getBlankPosition() {
+        int n = dimension();
+        Point position = null;
+        // find zero position
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (blocks[i][j] == 0) {
+                    position = new Point(i, j);
+                }
+            }
+        }
+        return position;
+
+    }
+
     // all neighboring boards
     public Iterable<Board> neighbors() {
-        return null;
+        Stack<Board> neighbors = new Stack<Board>();
+        Board left = moveLeft();
+        Board right = moveRight();
+        Board up = moveUp();
+        Board down = moveDown();
+        if (left != null) neighbors.push(left);
+        if (right != null) neighbors.push(right);
+        if (up != null) neighbors.push(up);
+        if (down != null) neighbors.push(down);
+        return neighbors;
+    }
+
+    private String oneDigitBoardString(int n) {
+        String puzzle;
+        puzzle = "" + n + "\n";
+        String format = "";
+        for (int i = 0; i < n; i++) {
+            String line = "";
+            for (int j = 0; j < n; j++) {
+                line += String.format("%2d", blocks[i][j]);
+            }
+            if (i != n - 1) {
+                line += "\n";
+            }
+            puzzle += line;
+        }
+        return puzzle;
+    }
+
+    private String multiDigitBoardString(int n) {
+        String puzzle;
+        puzzle = "" + n + "\n";
+        int digits = (int) Math.log10(n * n - 1);
+        String format = "%" + digits + "d";
+        for (int i = 0; i < n; i++) {
+            String line = "";
+            for (int j = 0; j < n; j++) {
+                line += String.format(format, blocks[i][j]);
+                if (j != n - 1) {
+                    line += " ";
+                }
+            }
+            if (i != n - 1) {
+                line += "\n";
+            }
+            puzzle += line;
+        }
+        return puzzle;
     }
 
     // string representation of this board (in the output format specified below)
     public String toString() {
-        return "";
+        int n = this.dimension();
+        if (n < 4) {
+            return oneDigitBoardString(n);
+        }
+        return multiDigitBoardString(n);
     }
 
     // unit tests (not graded)
