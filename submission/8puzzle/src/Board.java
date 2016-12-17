@@ -16,6 +16,9 @@ public class Board {
 
     // board dimension n
     public int dimension() {
+        if(blocks == null){
+            return 0;
+        }
         return blocks.length;
     }
 
@@ -88,21 +91,32 @@ public class Board {
 
     // is this board the goal board?
     public boolean isGoal() {
-        return true;
+        return hamming() == 0;
     }
 
     // a board that is obtained by exchanging any pair of blocks
     public Board twin() {
         int[][] board = copy();
-        int temp = board[1][0];
-        board[1][0] = board[0][0];
-        board[0][0] = temp;
-        return new Board(board);
+        int temp;
+        if (board[0][0] == 0 || board[0][1] == 0){
+            temp = board[1][0];
+            board[1][0] = board[1][1];
+            board[1][1] = temp;
+            return new Board(board);
+        } else {
+            temp = board[0][0];
+            board[0][0] = board[0][1];
+            board[0][1] = temp;
+            return new Board(board);
+        }
     }
 
     // does this board equal y?
     public boolean equals(Object y) {
-        return true;
+        if((y == null) || (y.getClass() != this.getClass())){
+            return false;
+        }
+        return this.toString().equals(y.toString());
     }
 
     private int[][] copy() {
@@ -234,6 +248,9 @@ public class Board {
     // string representation of this board (in the output format specified below)
     public String toString() {
         int n = this.dimension();
+        if(n == 0){
+            return "";
+        }
         if (n < 4) {
             return oneDigitBoardString(n);
         }

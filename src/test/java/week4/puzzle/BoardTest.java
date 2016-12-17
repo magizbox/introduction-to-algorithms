@@ -1,10 +1,10 @@
 package week4.puzzle;
 
 import com.google.common.collect.Iterables;
-import edu.princeton.cs.algs4.In;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by rain on 12/9/2016.
@@ -20,28 +20,15 @@ public class BoardTest {
     protected Board board23;
     protected Board board27;
 
-    protected String dataFolder = "D:\\PycharmProjects\\introduction-to-algorithms\\src\\test\\java\\week4\\puzzle\\data\\";
-
-    public Board loadBoard(String filename) {
-
-        In in = new In(dataFolder + filename);
-        int n = in.readInt();
-        int[][] blocks = new int[n][n];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                blocks[i][j] = in.readInt();
-        Board board = new Board(blocks);
-        return board;
-    }
 
     @Before
     public void runOnceBeforeClass() {
-        board4 = loadBoard("puzzle04.txt");
-        board7 = loadBoard("puzzle07.txt");
-        board8 = loadBoard("puzzle08.txt");
-        board17 = loadBoard("puzzle17.txt");
-        board27 = loadBoard("puzzle27.txt");
-        board23 = loadBoard("puzzle23.txt");
+        board4 = TestHelper.loadBoard("puzzle04.txt");
+        board7 = TestHelper.loadBoard("puzzle07.txt");
+        board8 = TestHelper.loadBoard("puzzle08.txt");
+        board17 = TestHelper.loadBoard("puzzle17.txt");
+        board27 = TestHelper.loadBoard("puzzle27.txt");
+        board23 = TestHelper.loadBoard("puzzle23.txt");
     }
 
     @Test
@@ -70,6 +57,19 @@ public class BoardTest {
                 + " 4 2 5\n"
                 + " 7 8 6";
         assertEquals(puzzle4, board4.toString());
+    }
+
+    @Test
+    public void testToStringNull() throws Exception {
+        Board board = new Board(null);
+        assertEquals("", board.toString());
+    }
+
+    @Test
+    public void testEqualsNull() throws Exception {
+        Board x = new Board(null);
+        Board y = new Board(null);
+        assertEquals(true, x.equals(y));
     }
 
     @Test
